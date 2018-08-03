@@ -1,0 +1,23 @@
+{
+    "name": "IFrolikov/RESTTools",
+    "type": "library",
+    "authors": [
+        {
+            "name": "ifrolikov",
+            "email": "frolikov.i@yandex.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.1"
+    },
+    "autoload": {
+      "psr-4": {
+        "IFrol\\RESTTools\\": "src/",
+        "IFrol\\RESTTools\\Tests\\": "tests/"
+      }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.3@dev"
+    }
+}
