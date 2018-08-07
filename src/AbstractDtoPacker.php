@@ -51,30 +51,40 @@ abstract class AbstractDtoPacker implements DtoPackerInterface
      */
     private function packToArray($dto): array
     {
-        $reflection = new \ReflectionClass($dto);
-        /** @var \ReflectionMethod[] $getters */
-        $getters = array_filter(
-            $reflection->getMethods(\ReflectionMethod::IS_PUBLIC),
-            function (\ReflectionMethod $method) {
-                return preg_match('~^get[A-Z]+~', $method->getName());
-            }
-        );
-
-        $result = [];
-        foreach ($getters as $getter) {
-            $propertyName = lcfirst(
-                preg_replace('~^get~', '', $getter->getName())
-            );
-
-            $getterValue = $getter->invoke($dto);
-            if (is_array($getterValue)) {
-                foreach ($getterValue as $value) {
-                    $result[$propertyName][] = $this->packValue($value);
-                }
-            } else {
-                $result[$propertyName] = $this->packValue($getterValue);
-            }
-        }
+    	if ($dto instanceof \stdClass) {
+    		$result = json_decode(json_encode($dto), true, JSON_UNESCAPED_UNICODE);
+		} else
+		{
+			$reflection = new \ReflectionClass($dto);
+			/** @var \ReflectionMethod[] $getters */
+			$getters = array_filter(
+				$reflection->getMethods(\ReflectionMethod::IS_PUBLIC),
+				function (\ReflectionMethod $method) {
+					return preg_match('~^get[A-Z]+~', $method->getName());
+				}
+			);
+		
+			$result = [];
+			foreach ($getters as $getter)
+			{
+				$propertyName = lcfirst(
+					preg_replace('~^get~', '', $getter->getName())
+				);
+			
+				$getterValue = $getter->invoke($dto);
+				if (is_array($getterValue))
+				{
+					foreach ($getterValue as $value)
+					{
+						$result[$propertyName][] = $this->packValue($value);
+					}
+				}
+				else
+				{
+					$result[$propertyName] = $this->packValue($getterValue);
+				}
+			}
+		}
         return $result;
     }
 }
