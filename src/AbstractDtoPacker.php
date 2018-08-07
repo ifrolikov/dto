@@ -26,9 +26,9 @@ abstract class AbstractDtoPacker implements DtoPackerInterface
     {
     	$result = is_array($data)
 			? array_map(function($dataItem) {
-				return $this->packInternal($dataItem);
+				return $this->packToArray($dataItem);
 			}, $data)
-			: $this->packInternal($data);
+			: $this->packToArray($data);
     	
         return $this->packInternal($result);
     }
