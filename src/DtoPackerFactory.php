@@ -5,7 +5,7 @@ namespace IFrol\RESTTools;
 
 use IFrol\RESTTools\Interfaces\DtoPackerFactoryInterface;
 use IFrol\RESTTools\Interfaces\DtoPackerInterface;
-use IFrol\RESTTools\Interfaces\IoCInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class DtoPackerFactory
@@ -18,16 +18,16 @@ class DtoPackerFactory implements DtoPackerFactoryInterface
      */
     private $dtoPackerClass;
     /**
-     * @var IoCInterface
+     * @var ContainerInterface
      */
     private $ioC;
 
     /**
      * DtoPackerFactoryInterface constructor.
      * @param string $dtoPackerClass
-     * @param IoCInterface $ioC
+     * @param ContainerInterface $ioC
      */
-    public function __construct(string $dtoPackerClass, IoCInterface $ioC)
+    public function __construct(string $dtoPackerClass, ContainerInterface $ioC)
     {
         $this->dtoPackerClass = $dtoPackerClass;
         $this->ioC = $ioC;

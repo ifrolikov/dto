@@ -5,7 +5,7 @@ namespace IFrol\RESTTools;
 
 use IFrol\RESTTools\Interfaces\DtoBuilderFactoryInterface;
 use IFrol\RESTTools\Interfaces\DtoBuilderInterface;
-use IFrol\RESTTools\Interfaces\IoCInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class DtoBuilderFactory
@@ -18,16 +18,16 @@ class DtoBuilderFactory implements DtoBuilderFactoryInterface
      */
     private $dtoBuilderClass;
     /**
-     * @var IoCInterface
+     * @var ContainerInterface
      */
     private $ioC;
 
     /**
      * DtoBuilderFactoryInterface constructor.
      * @param string $dtoBuilderClass
-     * @param IoCInterface $ioC
+     * @param ContainerInterface $ioC
      */
-    public function __construct(string $dtoBuilderClass, IoCInterface $ioC)
+    public function __construct(string $dtoBuilderClass, ContainerInterface $ioC)
     {
         $this->dtoBuilderClass = $dtoBuilderClass;
         $this->ioC = $ioC;

@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace IFrol\RESTTools\Tests\Data;
 
-use IFrol\RESTTools\Interfaces\IoCInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class IoC
+ *
  * @package IFrol\RESTTools\Tests\Data
  */
-class IoC implements IoCInterface
+class IoC implements ContainerInterface
 {
     /**
      * @var array
@@ -20,17 +21,33 @@ class IoC implements IoCInterface
     {
         $this->dependencies[$alias] = $implement;
     }
-
-    /**
-     * @param string $alias
-     * @return mixed
-     * @throws \Exception
-     */
-    public function get(string $alias)
+	
+	/**
+	 * @param $id
+	 * @return mixed
+	 * @throws \Exception
+	 */
+    public function get($id)
     {
         if (!isset($this->dependencies)) {
-            throw new \Exception("not found dependency " . $alias);
+            throw new \Exception("not found dependency " . $id);
         }
-        return $this->dependencies[$alias]($this);
+        return $this->dependencies[$id]($this);
     }
+	
+	/**
+	 * Returns true if the container can return an entry for the given identifier.
+	 * Returns false otherwise.
+	 *
+	 * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
+	 * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
+	 *
+	 * @param string $id Identifier of the entry to look for.
+	 *
+	 * @return bool
+	 */
+	public function has($id)
+	{
+		return isset($this->dependencies[$id]);
+	}
 }
