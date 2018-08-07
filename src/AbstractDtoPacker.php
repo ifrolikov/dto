@@ -15,16 +15,22 @@ abstract class AbstractDtoPacker implements DtoPackerInterface
      * @param array $data
      * @return string
      */
-    abstract function packInternal(array $data): string;
+    abstract protected function packInternal(array $data): string;
 
     /**
-     * @param object $dto
+     * @param object|object[] $data
      * @return string
      * @throws \ReflectionException
      */
-    public function pack($dto): string
+    public function pack($data): string
     {
-        return $this->packInternal($this->packToArray($dto));
+    	$result = is_array($data)
+			? array_map(function($dataItem) {
+				return $this->packInternal($dataItem);
+			}, $data)
+			: $this->packInternal($data);
+    	
+        return $this->packInternal($result);
     }
 
     /**

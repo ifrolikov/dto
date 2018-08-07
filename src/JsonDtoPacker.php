@@ -14,7 +14,7 @@ class JsonDtoPacker extends AbstractDtoPacker
      * @param array $data
      * @return string
      */
-    function packInternal(array $data): string
+    protected function packInternal(array $data): string
     {
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
