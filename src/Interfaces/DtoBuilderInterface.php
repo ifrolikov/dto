@@ -11,7 +11,7 @@ interface DtoBuilderInterface
 {
     /**
      * @param string $dtoClass
-     * @return object
+     * @return mixed Entry.
      */
     public function build(string $dtoClass);
 
