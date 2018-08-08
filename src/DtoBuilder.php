@@ -140,10 +140,14 @@ class DtoBuilder implements DtoBuilderInterface
      */
     private function buildClass(string $class, ?array $data)
     {
-        $builder = $this->builderFactory->create();
-        return is_null($data) ? null : $builder
-            ->setData($data)
-            ->build($class);
+    	if ($class == \stdClass::class) {
+    		return json_decode(json_encode($data), false);
+		} else {
+			$builder = $this->builderFactory->create();
+			return is_null($data) ? null : $builder
+				->setData($data)
+				->build($class);
+    	}
     }
 	
 	private function getRealType(string $type, \ReflectionClass $reflectionClass)
