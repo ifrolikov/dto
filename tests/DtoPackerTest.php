@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools\Tests;
+namespace ifrolikov\dto\Tests;
 
-use IFrol\RESTTools\DtoBuilder;
-use IFrol\RESTTools\DtoBuilderFactory;
-use IFrol\RESTTools\DtoPackerFactory;
-use IFrol\RESTTools\JsonDtoPacker;
-use IFrol\RESTTools\Tests\Data\BarDto;
-use IFrol\RESTTools\Tests\Data\BeerDto;
-use IFrol\RESTTools\Tests\Data\CafeDto;
-use IFrol\RESTTools\Tests\Data\IoC;
+use ifrolikov\dto\DtoBuilder;
+use ifrolikov\dto\DtoBuilderFactory;
+use ifrolikov\dto\DtoPackerFactory;
+use ifrolikov\dto\JsonDtoPacker;
+use ifrolikov\dto\Tests\Data\BarDto;
+use ifrolikov\dto\Tests\Data\BeerDto;
+use ifrolikov\dto\Tests\Data\CafeDto;
+use ifrolikov\dto\Tests\Data\IoC;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class DtoPackerTest
- * @package IFrol\RESTTools\Tests
+ * @package ifrolikov\dto\Tests
  */
 class DtoPackerTest extends TestCase
 {

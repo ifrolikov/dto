@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools;
+namespace ifrolikov\dto;
 
 /**
  * Class JsonDtoPacker
- * @package IFrol\RESTTools\Dto
+ * @package ifrolikov\dto\Dto
  */
 class JsonDtoPacker extends AbstractDtoPacker
 {

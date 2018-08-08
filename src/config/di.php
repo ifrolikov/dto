@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 return [
-	\IFrol\RESTTools\DtoBuilder::class        => function (\Psr\Container\ContainerInterface $container) {
-		return new \IFrol\RESTTools\DtoBuilder($container->get(\IFrol\RESTTools\DtoBuilderFactory::class));
+	\ifrolikov\dto\DtoBuilder::class        => function (\Psr\Container\ContainerInterface $container) {
+		return new \ifrolikov\dto\DtoBuilder($container->get(\ifrolikov\dto\DtoBuilderFactory::class));
 	},
-	\IFrol\RESTTools\DtoBuilderFactory::class => function (\Psr\Container\ContainerInterface $container) {
-		return new \IFrol\RESTTools\DtoBuilderFactory(
-			\IFrol\RESTTools\DtoBuilder::class,
+	\ifrolikov\dto\DtoBuilderFactory::class => function (\Psr\Container\ContainerInterface $container) {
+		return new \ifrolikov\dto\DtoBuilderFactory(
+			\ifrolikov\dto\DtoBuilder::class,
 			$container
 		);
 	},
-	\IFrol\RESTTools\JsonDtoPacker::class     => function (\Psr\Container\ContainerInterface $container) {
-		return new \IFrol\RESTTools\JsonDtoPacker();
+	\ifrolikov\dto\JsonDtoPacker::class     => function (\Psr\Container\ContainerInterface $container) {
+		return new \ifrolikov\dto\JsonDtoPacker();
 	}
 ];

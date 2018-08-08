@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools\Tests\Data;
+namespace ifrolikov\dto\Tests\Data;
 
 /**
  * Class BarDto
- * @package IFrol\RESTTools\Tests\Data
+ * @package ifrolikov\dto\Tests\Data
  */
 class BarDto
 {
     /**
-     * @var \IFrol\RESTTools\Tests\Data\BeerDto[]
+     * @var \ifrolikov\dto\Tests\Data\BeerDto[]
      */
     private $beers;
     /**
@@ -20,7 +20,7 @@ class BarDto
 
     /**
      * BarDto constructor.
-     * @param \IFrol\RESTTools\Tests\Data\BeerDto[] $beers
+     * @param \ifrolikov\dto\Tests\Data\BeerDto[] $beers
      * @param string[] $officiants
      */
     public function __construct(array $beers, array $officiants = ['Hugo', 'John'])

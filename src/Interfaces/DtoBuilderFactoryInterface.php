@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools\Interfaces;
+namespace ifrolikov\dto\Interfaces;
 
 use Psr\Container\ContainerInterface;
 
 /**
  * Interface DtoBuilderFactoryInterface
  *
- * @package IFrol\RESTTools\Dto\Interfaces
+ * @package ifrolikov\dto\Dto\Interfaces
  */
 interface DtoBuilderFactoryInterface
 {

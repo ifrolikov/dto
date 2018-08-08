@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools\Tests\Data;
+namespace ifrolikov\dto\Tests\Data;
 
 /**
  * Class CafeDto
- * @package IFrol\RESTTools\Tests\Data
+ * @package ifrolikov\dto\Tests\Data
  */
 class CafeDto
 {

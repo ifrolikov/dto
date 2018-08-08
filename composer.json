@@ -1,5 +1,5 @@
 {
-    "name": "IFrolikov/RESTTools",
+    "name": "ifrolikov/dto",
     "type": "library",
     "authors": [
         {
@@ -14,8 +14,8 @@
     },
     "autoload": {
       "psr-4": {
-        "IFrol\\RESTTools\\": "src/",
-        "IFrol\\RESTTools\\Tests\\": "tests/"
+        "ifrolikov\\dto\\": "src/",
+        "ifrolikov\\dto\\Tests\\": "tests/"
       }
     },
     "require-dev": {

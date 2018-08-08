@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools\Interfaces;
+namespace ifrolikov\dto\Interfaces;
 
 /**
  * Interface DtoBuilderInterface
- * @package IFrol\RESTTools\Dto\Interfaces
+ * @package ifrolikov\dto\Dto\Interfaces
  */
 interface DtoBuilderInterface
 {

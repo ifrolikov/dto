@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools;
+namespace ifrolikov\dto;
 
-use IFrol\RESTTools\Interfaces\DtoPackerInterface;
+use ifrolikov\dto\Interfaces\DtoPackerInterface;
 
 /**
  * Class AbstractDtoPacker
- * @package IFrol\RESTTools\Dto
+ * @package ifrolikov\dto\Dto
  */
 abstract class AbstractDtoPacker implements DtoPackerInterface
 {

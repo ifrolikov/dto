@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools\Tests\Data;
+namespace ifrolikov\dto\Tests\Data;
 
 use Psr\Container\ContainerInterface;
 
 /**
  * Class IoC
  *
- * @package IFrol\RESTTools\Tests\Data
+ * @package ifrolikov\dto\Tests\Data
  */
 class IoC implements ContainerInterface
 {

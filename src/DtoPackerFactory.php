@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace IFrol\RESTTools;
+namespace ifrolikov\dto;
 
-use IFrol\RESTTools\Interfaces\DtoPackerFactoryInterface;
-use IFrol\RESTTools\Interfaces\DtoPackerInterface;
+use ifrolikov\dto\Interfaces\DtoPackerFactoryInterface;
+use ifrolikov\dto\Interfaces\DtoPackerInterface;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class DtoPackerFactory
- * @package IFrol\RESTTools\Dto
+ * @package ifrolikov\dto\Dto
  */
 class DtoPackerFactory implements DtoPackerFactoryInterface
 {
