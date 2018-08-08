@@ -30,7 +30,7 @@ class DtoPackerTest extends TestCase
             return new DtoBuilderFactory(DtoBuilder::class, $ioc);
         });
         $ioc->add(DtoBuilder::class, function (IoC $ioc) {
-            return new DtoBuilder($ioc->get(DtoBuilderFactory::class));
+            return new DtoBuilder($ioc->get(DtoBuilderFactory::class), new \PhpDocReader\PhpParser\UseStatementParser());
         });
         $ioc->add(JsonDtoPacker::class, function (IoC $ioc) {
             return new JsonDtoPacker();

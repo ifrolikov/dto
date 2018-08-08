@@ -20,7 +20,7 @@ class BarDto
 
     /**
      * BarDto constructor.
-     * @param \ifrolikov\dto\Tests\Data\BeerDto[] $beers
+     * @param BeerDto[] $beers
      * @param string[] $officiants
      */
     public function __construct(array $beers, array $officiants = ['Hugo', 'John'])

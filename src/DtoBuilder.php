@@ -5,6 +5,7 @@ namespace ifrolikov\dto;
 
 use ifrolikov\dto\Interfaces\DtoBuilderFactoryInterface;
 use ifrolikov\dto\Interfaces\DtoBuilderInterface;
+use PhpDocReader\PhpParser\UseStatementParser;
 
 /**
  * Class DtoBuilder
@@ -20,15 +21,22 @@ class DtoBuilder implements DtoBuilderInterface
      * @var DtoBuilderFactoryInterface
      */
     private $builderFactory;
-
-    /**
-     * DtoBuilder constructor.
-     * @param DtoBuilderFactoryInterface $builderFactory
-     */
-    public function __construct(DtoBuilderFactoryInterface $builderFactory)
+	/**
+	 * @var UseStatementParser
+	 */
+	private $useStatementParser;
+	
+	/**
+	 * DtoBuilder constructor.
+	 *
+	 * @param DtoBuilderFactoryInterface $builderFactory
+	 * @param UseStatementParser         $useStatementParser
+	 */
+    public function __construct(DtoBuilderFactoryInterface $builderFactory, UseStatementParser $useStatementParser)
     {
         $this->builderFactory = $builderFactory;
-    }
+		$this->useStatementParser = $useStatementParser;
+	}
 
     /**
      * @param string $dtoClass
@@ -111,12 +119,15 @@ class DtoBuilder implements DtoBuilderInterface
         }
 
         $type = $matches[1];
+        
+        $realType = $this->getRealType($type, $property->getDeclaringClass());
+        
         $result = [];
         foreach ($data as $dataItem) {
-            if (in_array($type, ['string', 'int', 'bool'])) {
+            if (in_array($realType, ['string', 'int', 'bool'])) {
                 $result[] = $dataItem;
             } else {
-                $result[] = $this->buildClass($type, $dataItem);
+                $result[] = $this->buildClass($realType, $dataItem);
             }
         }
         return $result;
@@ -134,4 +145,24 @@ class DtoBuilder implements DtoBuilderInterface
             ->setData($data)
             ->build($class);
     }
+	
+	private function getRealType(string $type, \ReflectionClass $reflectionClass)
+	{
+		if (substr($type, 0, 1) === "\\") {
+			return $type;
+		}
+		
+		$lowerType = strtolower($type);
+		$statements = $this->useStatementParser->parseUseStatements($reflectionClass);
+		if (isset($statements[$lowerType])) {
+			$result = $statements[$lowerType];
+		} else {
+			$result = $reflectionClass->getNamespaceName().'\\'.$type;
+			if (!class_exists($result)) {
+				$result = $type;
+			}
+		}
+		
+		return $result;
+	}
 }
