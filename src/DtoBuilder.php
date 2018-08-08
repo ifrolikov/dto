@@ -40,7 +40,7 @@ class DtoBuilder implements DtoBuilderInterface
 
     /**
      * @param string $dtoClass
-     * @return object
+     * @return object Entry.
      * @throws \ReflectionException
      * @throws \Exception
      */
