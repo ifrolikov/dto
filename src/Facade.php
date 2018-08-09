@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ifrolikov\dto;
 
+use ifrolikov\dto\Interfaces\ArrayPackerInterface;
 use ifrolikov\dto\Interfaces\DtoBuilderInterface;
 use ifrolikov\dto\Interfaces\DtoPackerInterface;
 use Psr\Container\ContainerInterface;
@@ -41,5 +42,14 @@ class Facade
 	public function getJsonDtoPacker(): DtoPackerInterface
 	{
 		return $this->container->get(JsonDtoPacker::class);
+	}
+	
+	/**
+	 * @return ArrayPackerInterface
+	 * @throws \Exception
+	 */
+	public function getArrayPacker(): ArrayPackerInterface
+	{
+		return $this->container->get(ArrayPacker::class);
 	}
 }

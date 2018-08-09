@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ifrolikov\dto;
 
+use ifrolikov\dto\Interfaces\ArrayPackerInterface;
 use ifrolikov\dto\Interfaces\DtoPackerInterface;
 
 /**
@@ -11,7 +12,17 @@ use ifrolikov\dto\Interfaces\DtoPackerInterface;
  */
 abstract class AbstractDtoPacker implements DtoPackerInterface
 {
-    /**
+	/**
+	 * @var ArrayPackerInterface
+	 */
+	private $arrayPacker;
+	
+	public function __construct(ArrayPackerInterface $arrayPacker)
+	{
+		$this->arrayPacker = $arrayPacker;
+	}
+	
+	/**
      * @param array $data
      * @return string
      */
@@ -26,65 +37,10 @@ abstract class AbstractDtoPacker implements DtoPackerInterface
     {
     	$result = is_array($data)
 			? array_map(function($dataItem) {
-				return $this->packToArray($dataItem);
+				return $this->arrayPacker->pack($dataItem);
 			}, $data)
-			: $this->packToArray($data);
+			: $this->arrayPacker->pack($data);
     	
         return $this->packInternal($result);
-    }
-
-    /**
-     * @param mixed $value
-     * @return mixed array
-     * @throws \ReflectionException
-     */
-    private function packValue($value)
-    {
-        return is_scalar($value) ? $value : $this->packToArray($value);
-    }
-
-    /**
-     * @param object $dto
-     * @return array
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
-    private function packToArray($dto): array
-    {
-    	if ($dto instanceof \stdClass) {
-    		$result = json_decode(json_encode($dto), true, JSON_UNESCAPED_UNICODE);
-		} else
-		{
-			$reflection = new \ReflectionClass($dto);
-			/** @var \ReflectionMethod[] $getters */
-			$getters = array_filter(
-				$reflection->getMethods(\ReflectionMethod::IS_PUBLIC),
-				function (\ReflectionMethod $method) {
-					return preg_match('~^get[A-Z]+~', $method->getName());
-				}
-			);
-		
-			$result = [];
-			foreach ($getters as $getter)
-			{
-				$propertyName = lcfirst(
-					preg_replace('~^get~', '', $getter->getName())
-				);
-			
-				$getterValue = $getter->invoke($dto);
-				if (is_array($getterValue))
-				{
-					foreach ($getterValue as $value)
-					{
-						$result[$propertyName][] = $this->packValue($value);
-					}
-				}
-				else
-				{
-					$result[$propertyName] = $this->packValue($getterValue);
-				}
-			}
-		}
-        return $result;
     }
 }

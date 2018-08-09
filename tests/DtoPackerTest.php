@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ifrolikov\dto\Tests;
 
+use ifrolikov\dto\ArrayPacker;
 use ifrolikov\dto\DtoBuilder;
 use ifrolikov\dto\DtoBuilderFactory;
 use ifrolikov\dto\DtoPackerFactory;
@@ -33,7 +34,7 @@ class DtoPackerTest extends TestCase
             return new DtoBuilder($ioc->get(DtoBuilderFactory::class), new \PhpDocReader\PhpParser\UseStatementParser());
         });
         $ioc->add(JsonDtoPacker::class, function (IoC $ioc) {
-            return new JsonDtoPacker();
+            return new JsonDtoPacker(new ArrayPacker());
         });
         $ioc->add(DtoPackerFactory::class, function (IoC $ioc) {
             return new DtoPackerFactory(JsonDtoPacker::class, $ioc);

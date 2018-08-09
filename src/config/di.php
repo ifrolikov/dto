@@ -16,5 +16,8 @@ return [
 	},
 	\ifrolikov\dto\JsonDtoPacker::class     => function (\Psr\Container\ContainerInterface $container) {
 		return new \ifrolikov\dto\JsonDtoPacker();
+	},
+	\ifrolikov\dto\ArrayPacker::class       => function (\Psr\Container\ContainerInterface $container) {
+		return new \ifrolikov\dto\ArrayPacker();
 	}
 ];
