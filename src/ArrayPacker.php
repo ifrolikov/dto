@@ -44,6 +44,7 @@ class ArrayPacker implements ArrayPackerInterface
 				$getterValue = $getter->invoke($dto);
 				if (is_array($getterValue))
 				{
+					$result[$propertyName] = [];
 					foreach ($getterValue as $value)
 					{
 						$result[$propertyName][] = $this->packValue($value);
