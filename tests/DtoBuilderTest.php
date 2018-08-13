@@ -5,6 +5,7 @@ namespace ifrolikov\dto\Tests;
 
 use ifrolikov\dto\DtoBuilder;
 use ifrolikov\dto\DtoBuilderFactory;
+use ifrolikov\dto\Exceptions\TypeError;
 use ifrolikov\dto\Tests\Data\BarDto;
 use ifrolikov\dto\Tests\Data\BeerDto;
 use ifrolikov\dto\Tests\Data\CafeDto;
@@ -61,6 +62,62 @@ class DtoBuilderTest extends TestCase
             $this->assertEquals($manualCafe, $builderCafe);
         } catch (\Exception $exception) {
             $this->assertEquals(true, false, (string)$exception);
+        }
+    }
+    
+    public function testTypeErrorException() {
+        $ioc = new IoC();
+        $ioc->add(DtoBuilderFactory::class, function (IoC $ioc) {
+            return new DtoBuilderFactory(DtoBuilder::class, $ioc);
+        });
+        $ioc->add(DtoBuilder::class, function (IoC $ioc) {
+            return new DtoBuilder($ioc->get(DtoBuilderFactory::class), new \PhpDocReader\PhpParser\UseStatementParser());
+        });
+    
+        /** @var DtoBuilder $dtoBuilder */
+        $dtoBuilder = $ioc->get(DtoBuilder::class);
+        
+        $json = '
+        {
+          "name": "Shakespeare",
+          "bar": {
+            "beers": [
+              {
+                "_ignoreField": "_someValue"
+              },
+              {
+                "label": 123
+              }
+            ]
+          }
+        }
+        ';
+    
+        $data = json_decode($json, true);
+        
+        try {
+            $dtoBuilder->setData($data)->build(CafeDto::class);
+        } catch (TypeError $error) {
+            $property = $error->getProperty();
+            $this->assertEquals($property, 'bar.beers.label');
+        }
+    
+        $json = '
+        {
+          "name": "Shakespeare",
+          "bar": {
+            "beers": "guinness"
+          }
+        }
+        ';
+    
+        $data = json_decode($json, true);
+    
+        try {
+            $dtoBuilder->setData($data)->build(CafeDto::class);
+        } catch (TypeError $error) {
+            $property = $error->getProperty();
+            $this->assertEquals($property, 'bar.beers');
         }
     }
 }

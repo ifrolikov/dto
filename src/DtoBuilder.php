@@ -57,6 +57,20 @@ class DtoBuilder implements DtoBuilderInterface
         $createArgs = [];
         foreach ($properties as $property) {
             if ($property->isArray()) {
+                
+                if (isset($this->data[$property->name]) && $this->data[$property->name] && !is_array($this->data[$property->name])) {
+                    $this->validateProperty(
+                        $property,
+                        $this->data[$property->name],
+                        null,
+                        'array',
+                        null,
+                        gettype($this->data[$property->name]),
+                        false,
+                        false
+                    );
+                }
+                
                 $createArgs[$property->name] = $this->buildArray(
                     $constructor, $property, $this->data[$property->name] ?? []
                 );
@@ -102,7 +116,9 @@ class DtoBuilder implements DtoBuilderInterface
             $class ? $class->getName() : null,
             $class ? null : $property->getType()->getName(),
             is_scalar($result) ? null : get_class($result),
-            !is_scalar($result) ? null : gettype($result)
+            !is_scalar($result) ? null : gettype($result),
+            false,
+            false
         );
         
         return $result;
@@ -160,7 +176,9 @@ class DtoBuilder implements DtoBuilderInterface
                     null,
                     $realType,
                     is_scalar($resultItem) ? null : get_class($resultItem),
-                    !is_scalar($resultItem) ? null : gettype($resultItem)
+                    !is_scalar($resultItem) ? null : gettype($resultItem),
+                    true,
+                    true
                 );
             }
         }
@@ -227,6 +245,8 @@ class DtoBuilder implements DtoBuilderInterface
      * @param string|null $type
      * @param string|null $valueClass
      * @param string|null $valueType
+     * @param bool $isMultiple
+     * @param bool $isMultipleValue
      */
     private function validateProperty(
         \ReflectionParameter $property,
@@ -234,20 +254,25 @@ class DtoBuilder implements DtoBuilderInterface
         string $class = null,
         string $type = null,
         string $valueClass = null,
-        string $valueType = null
+        string $valueType = null,
+        bool $isMultiple = false,
+        bool $isMultipleValue = false
     ): void
     {
+        $classOrType = ($class ?: $type) . ($isMultiple ? '[]' : '');
+        $valueClassOrtype = ($valueClass ?: $valueType) . ($isMultipleValue ? '[]' : '');
+        
         if (!$property->allowsNull() && is_null($value)) {
-            throw new TypeError($property->getName(), $class ?: $type, $valueClass ?: $type, $property->getDeclaringClass()->getName());
+            throw new TypeError($property->getName(), $classOrType, $valueClassOrtype, $property->getDeclaringClass()->getName());
         }
         
         if ($class) {
             if ($valueClass !== $class && !is_subclass_of($valueClass, $class)) {
-                throw new TypeError($property->getName(), $class ?: $type, $valueClass ?: $type, $property->getDeclaringClass()->getName());
+                throw new TypeError($property->getName(), $classOrType, $valueClassOrtype, $property->getDeclaringClass()->getName());
             }
         } elseif (!is_null($value)) {
             if ($valueType !== $type) {
-                throw new TypeError($property->getName(), $class ?: $type, $valueClass ?: $type, $property->getDeclaringClass()->getName());
+                throw new TypeError($property->getName(), $classOrType, $valueClassOrtype, $property->getDeclaringClass()->getName());
             }
         }
     }
