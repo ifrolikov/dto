@@ -271,9 +271,30 @@ class DtoBuilder implements DtoBuilderInterface
                 throw new TypeError($property->getName(), $classOrType, $valueClassOrtype, $property->getDeclaringClass()->getName());
             }
         } elseif (!is_null($value)) {
+            $valueType = $this->getFullScalarType($valueType);
+            $type = $this->getFullScalarType($type);
             if ($valueType !== $type) {
                 throw new TypeError($property->getName(), $classOrType, $valueClassOrtype, $property->getDeclaringClass()->getName());
             }
+        }
+    }
+    
+    /**
+     * @param string $type
+     * @return string
+     */
+    private function getFullScalarType(string $type): string
+    {
+        $type = strtolower($type);
+        switch ($type) {
+            case 'int':
+                return 'integer';
+                break;
+            case 'bool':
+                return 'boolean';
+                break;
+            default:
+                return $type;
         }
     }
 }
