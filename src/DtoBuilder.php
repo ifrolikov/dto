@@ -273,7 +273,7 @@ class DtoBuilder implements DtoBuilderInterface
         } elseif (!is_null($value)) {
             $valueType = $this->getFullScalarType($valueType);
             $type = $this->getFullScalarType($type);
-            if ($valueType !== $type) {
+            if ($valueType !== $type && !($type == 'float' && in_array($valueType, ['double', 'integer']))) {
                 throw new TypeError($property->getName(), $classOrType, $valueClassOrtype, $property->getDeclaringClass()->getName());
             }
         }
