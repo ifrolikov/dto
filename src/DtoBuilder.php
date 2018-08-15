@@ -195,7 +195,9 @@ class DtoBuilder implements DtoBuilderInterface
     private function buildClass(\ReflectionParameter $property, string $class, ?array $data)
     {
         if ($class == \stdClass::class) {
-            return json_decode(json_encode($data), false);
+            $result = json_decode(json_encode($data), false);
+            $result = $result ?? new \stdClass();
+            return $result;
         } else {
             try {
                 $builder = $this->builderFactory->create();
