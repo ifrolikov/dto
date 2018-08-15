@@ -66,6 +66,6 @@ class ArrayPacker implements ArrayPackerInterface
 	 */
 	private function packValue($value)
 	{
-		return is_scalar($value) ? $value : $this->pack($value);
+		return is_scalar($value) || is_null($value) ? $value : $this->pack($value);
 	}
 }
