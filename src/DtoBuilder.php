@@ -196,7 +196,7 @@ class DtoBuilder implements DtoBuilderInterface
     {
         if ($class == \stdClass::class) {
             $result = json_decode(json_encode($data), false);
-            $result = $result ?? new \stdClass();
+            $result = $result ?: new \stdClass();
             return $result;
         } else {
             try {
