@@ -18,7 +18,7 @@ interface DtoPackerFactoryInterface
      * @param ContainerInterface $ioC
      */
     public function __construct(string $dtoPackerClass, ContainerInterface $ioC);
-
+    
     /**
      * @return DtoPackerInterface
      */

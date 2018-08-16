@@ -21,9 +21,9 @@ class DtoBuilder implements DtoBuilderInterface
      * @var DtoBuilderFactoryInterface
      */
     private $builderFactory;
-	/**
-	 * @var PhpDocManager
-	 */
+    /**
+     * @var PhpDocManager
+     */
     private $phpDocManager;
     
     /**
@@ -67,7 +67,7 @@ class DtoBuilder implements DtoBuilderInterface
                 }
                 
                 $createArgs[$property->name] = $this->buildArray(
-                    $constructor, $property, $this->data[$property->name] ?? []
+                    $property, $this->data[$property->name] ?? []
                 );
             } else {
                 $createArgs[$property->name] = $this->buildOne($property, $this->data[$property->name] ?? null);
@@ -120,13 +120,12 @@ class DtoBuilder implements DtoBuilderInterface
     }
     
     /**
-     * @param \ReflectionMethod $constructor
      * @param \ReflectionParameter $property
      * @param array $data
      * @return array
      * @throws \Exception
      */
-    private function buildArray(\ReflectionMethod $constructor, \ReflectionParameter $property, array $data)
+    private function buildArray(\ReflectionParameter $property, array $data)
     {
         if (empty($data)) {
             return ($property->isDefaultValueAvailable()) && ($default = $property->getDefaultValue())

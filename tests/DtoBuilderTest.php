@@ -36,9 +36,9 @@ class DtoBuilderTest extends TestCase
           }
         }
         ';
-
+        
         $data = json_decode($json, true);
-
+        
         $manualCafe = new CafeDto(
             "Shakespeare",
             new BarDto([
@@ -46,7 +46,7 @@ class DtoBuilderTest extends TestCase
                 new BeerDto("newcastle")
             ])
         );
-
+        
         $ioc = new IoC();
         $ioc->add(DtoBuilderFactory::class, function (IoC $ioc) {
             return new DtoBuilderFactory(DtoBuilder::class, $ioc);
@@ -54,19 +54,20 @@ class DtoBuilderTest extends TestCase
         $ioc->add(DtoBuilder::class, function (IoC $ioc) {
             return new DtoBuilder($ioc->get(DtoBuilderFactory::class), $this->getPhpDocManager());
         });
-
+        
         try {
             /** @var DtoBuilder $dtoBuilder */
             $dtoBuilder = $ioc->get(DtoBuilder::class);
             $builderCafe = $dtoBuilder->setData($data)->build(CafeDto::class);
-
+            
             $this->assertEquals($manualCafe, $builderCafe);
         } catch (\Exception $exception) {
             $this->assertEquals(true, false, (string)$exception);
         }
     }
     
-    public function testTypeErrorException() {
+    public function testTypeErrorException()
+    {
         $ioc = new IoC();
         $ioc->add(DtoBuilderFactory::class, function (IoC $ioc) {
             return new DtoBuilderFactory(DtoBuilder::class, $ioc);
@@ -74,7 +75,7 @@ class DtoBuilderTest extends TestCase
         $ioc->add(DtoBuilder::class, function (IoC $ioc) {
             return new DtoBuilder($ioc->get(DtoBuilderFactory::class), $this->getPhpDocManager());
         });
-    
+        
         /** @var DtoBuilder $dtoBuilder */
         $dtoBuilder = $ioc->get(DtoBuilder::class);
         
@@ -93,7 +94,7 @@ class DtoBuilderTest extends TestCase
           }
         }
         ';
-    
+        
         $data = json_decode($json, true);
         
         try {
@@ -102,7 +103,7 @@ class DtoBuilderTest extends TestCase
             $property = $error->getProperty();
             $this->assertEquals($property, 'bar.beers.label');
         }
-    
+        
         $json = '
         {
           "name": "Shakespeare",
@@ -111,9 +112,9 @@ class DtoBuilderTest extends TestCase
           }
         }
         ';
-    
+        
         $data = json_decode($json, true);
-    
+        
         try {
             $dtoBuilder->setData($data)->build(CafeDto::class);
         } catch (TypeError $error) {
@@ -121,12 +122,12 @@ class DtoBuilderTest extends TestCase
             $this->assertEquals($property, 'bar.beers');
         }
     }
-	
-	/**
-	 * @return PhpDocManager
-	 */
+    
+    /**
+     * @return PhpDocManager
+     */
     private function getPhpDocManager(): PhpDocManager
     {
-    	return new PhpDocManager(new \PhpDocReader\PhpParser\UseStatementParser());
+        return new PhpDocManager(new \PhpDocReader\PhpParser\UseStatementParser());
     }
 }
