@@ -76,6 +76,9 @@ class DtoFakeDataGenerator implements DtoFakeDataGeneratorInterface
      */
     private function generateByClass(\ReflectionClass $class): string
     {
+        if ($class->getName() == \stdClass::class) {
+            return "new \stdClass()";
+        }
         return $this->generate($class->getName(), false);
     }
     
