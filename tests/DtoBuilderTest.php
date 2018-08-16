@@ -6,6 +6,7 @@ namespace ifrolikov\dto\Tests;
 use ifrolikov\dto\DtoBuilder;
 use ifrolikov\dto\DtoBuilderFactory;
 use ifrolikov\dto\Exceptions\TypeError;
+use ifrolikov\dto\PhpDocManager;
 use ifrolikov\dto\Tests\Data\BarDto;
 use ifrolikov\dto\Tests\Data\BeerDto;
 use ifrolikov\dto\Tests\Data\CafeDto;
@@ -51,7 +52,7 @@ class DtoBuilderTest extends TestCase
             return new DtoBuilderFactory(DtoBuilder::class, $ioc);
         });
         $ioc->add(DtoBuilder::class, function (IoC $ioc) {
-            return new DtoBuilder($ioc->get(DtoBuilderFactory::class), new \PhpDocReader\PhpParser\UseStatementParser());
+            return new DtoBuilder($ioc->get(DtoBuilderFactory::class), $this->getPhpDocManager());
         });
 
         try {
@@ -71,7 +72,7 @@ class DtoBuilderTest extends TestCase
             return new DtoBuilderFactory(DtoBuilder::class, $ioc);
         });
         $ioc->add(DtoBuilder::class, function (IoC $ioc) {
-            return new DtoBuilder($ioc->get(DtoBuilderFactory::class), new \PhpDocReader\PhpParser\UseStatementParser());
+            return new DtoBuilder($ioc->get(DtoBuilderFactory::class), $this->getPhpDocManager());
         });
     
         /** @var DtoBuilder $dtoBuilder */
@@ -119,5 +120,13 @@ class DtoBuilderTest extends TestCase
             $property = $error->getProperty();
             $this->assertEquals($property, 'bar.beers');
         }
+    }
+	
+	/**
+	 * @return PhpDocManager
+	 */
+    private function getPhpDocManager(): PhpDocManager
+    {
+    	return new PhpDocManager(new \PhpDocReader\PhpParser\UseStatementParser());
     }
 }

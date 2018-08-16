@@ -5,7 +5,7 @@ return [
 	\ifrolikov\dto\DtoBuilder::class        => function (\Psr\Container\ContainerInterface $container) {
 		return new \ifrolikov\dto\DtoBuilder(
 			$container->get(\ifrolikov\dto\DtoBuilderFactory::class),
-			new \PhpDocReader\PhpParser\UseStatementParser()
+			$container->get(\ifrolikov\dto\PhpDocManager::class)
 		);
 	},
 	\ifrolikov\dto\DtoBuilderFactory::class => function (\Psr\Container\ContainerInterface $container) {
@@ -19,5 +19,15 @@ return [
 	},
 	\ifrolikov\dto\ArrayPacker::class       => function (\Psr\Container\ContainerInterface $container) {
 		return new \ifrolikov\dto\ArrayPacker();
+	},
+	\ifrolikov\dto\PhpDocManager::class => function (\Psr\Container\ContainerInterface $container) {
+		return new \ifrolikov\dto\PhpDocManager(
+			new \PhpDocReader\PhpParser\UseStatementParser()
+		);
+	},
+	\ifrolikov\dto\DtoFakeDataGenerator::class => function (\Psr\Container\ContainerInterface $container) {
+		return new \ifrolikov\dto\DtoFakeDataGenerator(
+			$container->get(\ifrolikov\dto\PhpDocManager::class)
+		);
 	}
 ];

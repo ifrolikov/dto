@@ -6,7 +6,6 @@ namespace ifrolikov\dto;
 use ifrolikov\dto\Exceptions\TypeError;
 use ifrolikov\dto\Interfaces\DtoBuilderFactoryInterface;
 use ifrolikov\dto\Interfaces\DtoBuilderInterface;
-use PhpDocReader\PhpParser\UseStatementParser;
 
 /**
  * Class DtoBuilder
@@ -22,25 +21,21 @@ class DtoBuilder implements DtoBuilderInterface
      * @var DtoBuilderFactoryInterface
      */
     private $builderFactory;
-    /**
-     * @var UseStatementParser
-     */
-    private $useStatementParser;
-    /**
-     * @var string[]
-     */
-    private $scalarTypes = ['string', 'int', 'bool', 'integer', 'boolean', 'float'];
+	/**
+	 * @var PhpDocManager
+	 */
+    private $phpDocManager;
     
     /**
      * DtoBuilder constructor.
      *
      * @param DtoBuilderFactoryInterface $builderFactory
-     * @param UseStatementParser $useStatementParser
+     * @param PhpDocManager $phpDocManager
      */
-    public function __construct(DtoBuilderFactoryInterface $builderFactory, UseStatementParser $useStatementParser)
+    public function __construct(DtoBuilderFactoryInterface $builderFactory, PhpDocManager $phpDocManager)
     {
         $this->builderFactory = $builderFactory;
-        $this->useStatementParser = $useStatementParser;
+        $this->phpDocManager = $phpDocManager;
     }
     
     /**
@@ -139,32 +134,15 @@ class DtoBuilder implements DtoBuilderInterface
                 : [];
         }
         
-        $calledClass = $constructor->getDeclaringClass()->getName();
-        
-        $doc = $constructor->getDocComment();
-        if (!$doc) {
-            throw new \Exception('write phpdoc for ' . $calledClass);
-        }
-        if (!preg_match(
-            '~\*[\s]+\@param[\s]+([A-Za-z0-9_\\\]+)\[\][\s]+\$' . $property->getName() . '~s',
-            $doc,
-            $matches
-        )
-        ) {
-            throw new \Exception('write param phpdoc for ' . $calledClass . ' ' . $property->getName());
-        }
-        
-        $type = $matches[1];
-        
-        $realType = $this->getRealType($type, $property->getDeclaringClass());
-        $isScalar = in_array($realType, $this->scalarTypes);
+        $type = $this->phpDocManager->getArrayItemType($property);
+        $isScalar = $this->phpDocManager->isScalar($type);
         
         $result = [];
         foreach ($data as $dataItem) {
             if ($isScalar) {
                 $result[] = $dataItem;
             } else {
-                $result[] = $this->buildClass($property, $realType, $dataItem);
+                $result[] = $this->buildClass($property, $type, $dataItem);
             }
         }
         
@@ -174,7 +152,7 @@ class DtoBuilder implements DtoBuilderInterface
                     $property,
                     $resultItem,
                     null,
-                    $realType,
+                    $type,
                     is_scalar($resultItem) ? null : get_class($resultItem),
                     !is_scalar($resultItem) ? null : gettype($resultItem),
                     true,
@@ -213,31 +191,6 @@ class DtoBuilder implements DtoBuilderInterface
                 );
             }
         }
-    }
-    
-    /**
-     * @param string $type
-     * @param \ReflectionClass $reflectionClass
-     * @return string
-     */
-    private function getRealType(string $type, \ReflectionClass $reflectionClass)
-    {
-        if (substr($type, 0, 1) === "\\") {
-            return $type;
-        }
-        
-        $lowerType = strtolower($type);
-        $statements = $this->useStatementParser->parseUseStatements($reflectionClass);
-        if (isset($statements[$lowerType])) {
-            $result = $statements[$lowerType];
-        } else {
-            $result = $reflectionClass->getNamespaceName() . '\\' . $type;
-            if (!class_exists($result)) {
-                $result = $type;
-            }
-        }
-        
-        return $result;
     }
     
     /**

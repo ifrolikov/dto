@@ -52,4 +52,12 @@ class Facade
 	{
 		return $this->container->get(ArrayPacker::class);
 	}
+	
+	/**
+	 * @return DtoFakeDataGenerator
+	 */
+	public function getDtoFakeDataGenerator(): DtoFakeDataGenerator
+	{
+		return $this->container->get(DtoFakeDataGenerator::class);
+	}
 }
